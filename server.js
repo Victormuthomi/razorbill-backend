@@ -3,23 +3,10 @@ const axios = require("axios");
 const cors = require("cors");
 require("dotenv").config();
 
-const app = express();
 const PORT = process.env.PORT || 5000;
+const app = express();
 
-// Allow both Vercel frontend and local dev
-const allowedOrigins = [
-  "https://razorbill-website.vercel.app",
-  "http://localhost:5173",
-];
-
-app.use(
-  cors({
-    origin: allowedOrigins,
-    methods: ["GET", "POST"],
-    credentials: true,
-  }),
-);
-
+app.use(cors());
 app.use(express.json());
 
 app.post("/ask", async (req, res) => {
@@ -29,13 +16,8 @@ app.post("/ask", async (req, res) => {
     const response = await axios.post(
       "https://openrouter.ai/api/v1/chat/completions",
       {
-        model: "mistral/mistral-7b-instruct",
+        model: "openai/gpt-3.5-turbo", // or try "openai/gpt-3.5-turbo"
         messages: [
-          {
-            role: "system",
-            content:
-              "You are SportGPT, an expert in sports. Answer only sports-related questions clearly and concisely.",
-          },
           {
             role: "user",
             content: question,
